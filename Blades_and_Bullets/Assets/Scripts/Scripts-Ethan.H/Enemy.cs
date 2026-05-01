@@ -77,10 +77,13 @@ public class WaveEnemy : MonoBehaviour
   
         currentPhase = Phase.Entry;
 
-        if (entryPath != null && speed > 0f)
+        if (entryPath != null)
         {
-            float t = (phaseTimer + entryStartOffset) / speed;
-            t = Mathf.Clamp01(t);
+            float t = Mathf.Clamp01(entryStartOffset / speed);
+
+            if (t < 0f)
+                t = 0f;
+
             transform.position = entryPath.GetPoint(t) + slotOffset + new Vector3(-10,0,0);
         }
     }
