@@ -23,12 +23,12 @@ public class SineBulletMovement : IMovementType
     {
         age += Time.deltaTime;
 
-        Vector2 forward = direction * speed * age;
+        
+        //
+        Vector2 wavePos = startPos + direction * speed * age + new Vector2(-direction.y, direction.x) * Mathf.Sin(age * frequency) * amplitude;
 
-        Vector2 perpendicular = new Vector2(-direction.y, direction.x);
-        float offset = Mathf.Sin(age * frequency) * amplitude;
-
-        bullet.transform.position = startPos + forward + perpendicular * offset;
+        //bullet.transform.position = startPos + forward + perpendicular * offset;
+        bullet.transform.position = new Vector3(wavePos.x, wavePos.y, 0.3f);
     }
 
     public SineBulletMovement(float speed, float amplitude, float frequency)

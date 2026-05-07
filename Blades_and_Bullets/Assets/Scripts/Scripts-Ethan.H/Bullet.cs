@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -15,9 +14,9 @@ public class Bullet : MonoBehaviour
     private Vector2 direction;
     private Transform target;
     
-   // CircleCollider2D circleCollider;
+    CircleCollider2D circleCollider;
   
-   // CapsuleCollider2D capsuleCollider;
+    CapsuleCollider2D capsuleCollider;
    
     
 
@@ -52,16 +51,16 @@ public class Bullet : MonoBehaviour
 
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-      //  circleCollider = GetComponentInChildren<CircleCollider2D>();
-       // capsuleCollider = GetComponentInChildren<CapsuleCollider2D>();
+        circleCollider = GetComponentInChildren<CircleCollider2D>();
+        capsuleCollider = GetComponentInChildren<CapsuleCollider2D>();
 
-       // if(circleCollider == null || capsuleCollider == null)
-       // {
-          //  Debug.Log("Colliders null");
-       // }
+        if(circleCollider == null || capsuleCollider == null)
+        {
+            Debug.Log("Colliders null");
+        }
 
 
-       // SetTriggers();
+       SetTriggers();
 
 
   
@@ -82,19 +81,18 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
-        SlashScript.OnSlashingSomething +=OnSlashingSomething;
+
         WallScript.OnWallHit += OnWallHit;
-        Player.OnPlayerGetsHit += OnPlayerGetsHit;
+        // Player.PlayerGetsHit += OnPlayerGetsHit;
 
     }
     
 
-    private void OnPlayerGetsHit(object sender, Player.OnPlayerGetsHitArgs e)
-    {
-        if(e.TargetHit.Equals(gameObject)) Destroy(gameObject);
-    }
+    // private void OnPlayerGetsHit(object sender, Player.PlayerGetsHitArgs e)
+    // {
+    //     if(e.TargetHit.Equals(gameObject)) Destroy(gameObject);
+    // }
 
-   
 
     private void OnWallHit(object sender, WallScript.OnWallHitArgs e)
     {
@@ -104,44 +102,38 @@ public class Bullet : MonoBehaviour
 
     private void OnDestroy()
     {
-        SlashScript.OnSlashingSomething -=OnSlashingSomething;
         WallScript.OnWallHit -= OnWallHit;
-        Player.OnPlayerGetsHit -= OnPlayerGetsHit;
+        // Player.PlayerGetsHit -= OnPlayerGetsHit;
     }
 
-    private void OnSlashingSomething(object sender, SlashScript.OnSlashingSomethingArgs e)
+    private void SetTriggers()
     {
-        if(e.TargetHit.Equals(gameObject)) Destroy(gameObject);
-    }
+       capsuleCollider.enabled = false;
+        circleCollider.enabled = false;
 
-    //private void SetTriggers()
-   // {
-     //  capsuleCollider.enabled = false;
-      //  circleCollider.enabled = false;
+        switch (bulletTypeSO.hurtBoxType)
+        {
+            case BulletTypeSO.HurtBoxType.Circle:
+                circleCollider.enabled = true;
+                circleCollider.radius = bulletTypeSO.radius;
+                circleCollider.offset = bulletTypeSO.offset;
+                break;
 
-       // switch (bulletTypeSO.hurtBoxType)
-      //  {
-         //   case BulletTypeSO.HurtBoxType.Circle:
-          //      circleCollider.enabled = true;
-           //     circleCollider.radius = bulletTypeSO.radius;
-           //     circleCollider.offset = bulletTypeSO.offset;
-           //     break;
-
-          //  case BulletTypeSO.HurtBoxType.Capsule:
-           //    capsuleCollider.enabled = true;
-             //   capsuleCollider.size = bulletTypeSO.sizeCapsule;
-            //    capsuleCollider.offset = bulletTypeSO.offset;
-            //    break;
+            case BulletTypeSO.HurtBoxType.Capsule:
+               capsuleCollider.enabled = true;
+                capsuleCollider.size = bulletTypeSO.sizeCapsule;
+                capsuleCollider.offset = bulletTypeSO.offset;
+                break;
 
         
 
 
 
-      //  }
+       }
 
 
 
- //   }
+    }
 
     public void SetPool(BulletPool bulletPool)
     {
@@ -194,7 +186,14 @@ public class Bullet : MonoBehaviour
         }
         movementType?.Tick(this);
 
-       
+       if (gameObject.transform.position.x < -8.75f  || gameObject.transform.position.x > 2.75f)
+        {
+            DespawnBullet();
+        }
+        if (gameObject.transform.position.y < -4.8f  || gameObject.transform.position.y > 4.8f)
+        {
+            DespawnBullet();
+        }
     }
 
     public void DespawnBullet()

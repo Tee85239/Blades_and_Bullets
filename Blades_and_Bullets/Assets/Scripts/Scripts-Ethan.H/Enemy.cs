@@ -32,8 +32,8 @@ public class WaveEnemy : MonoBehaviour
 
 
     [SerializeField]
-    private int maxHP;
-    private int currentHP;
+    private float maxHP;
+    private float currentHP;
     [SerializeField]
     private int pointDropCount;
     [SerializeField]
@@ -84,7 +84,8 @@ public class WaveEnemy : MonoBehaviour
             if (t < 0f)
                 t = 0f;
 
-            transform.position = entryPath.GetPoint(t) + slotOffset + new Vector3(-10,0,0);
+            transform.position = entryPath.GetPointByDistance(t) + new Vector3(-70,0,0);
+
         }
     }
 
@@ -146,6 +147,7 @@ public class WaveEnemy : MonoBehaviour
                 break;
 
         }
+
     }
 
 
@@ -166,7 +168,7 @@ public class WaveEnemy : MonoBehaviour
             return;
 
         t = Mathf.Clamp01(t);
-        transform.position = entryPath.GetPoint(t) + slotOffset;
+        transform.position = entryPath.GetPointByDistance(t) + slotOffset;
 
         if (t >= 1f)
         {
@@ -227,11 +229,22 @@ public class WaveEnemy : MonoBehaviour
     private void OnSlashingSomething(object sender, SlashScript.OnSlashingSomethingArgs e)
     {
 
-        if (e.TargetHit.Equals(gameObject)) Destroy(gameObject);
+        // if (e.TargetHit.Equals(gameObject)) Destroy(gameObject);
     }
 
     private void OnDestroy()
     {
         SlashScript.OnSlashingSomething -= OnSlashingSomething;
+    }
+
+    public void TakeDamage(float damage)
+    {   
+
+        currentHP -= damage;
+        if (currentHP <= 0)
+        {
+            Die();
+
+        }
     }
 }

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8603449334043081050}
   - component: {fileID: 2706394427456815671}
   - component: {fileID: 6749748311536251157}
-  - component: {fileID: 4458794904140040038}
   - component: {fileID: 3102862232210512021}
+  - component: {fileID: -6450645202289346253}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -130,7 +130,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.3
 --- !u!50 &6749748311536251157
 Rigidbody2D:
   serializedVersion: 5
@@ -158,18 +158,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4458794904140040038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8692893170456775137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172b3c24604a16f4c94704e255cb8a8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bomb
 --- !u!114 &3102862232210512021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,3 +170,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7053327775be11b8da8782b7ff668e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlashScript
+  normalSlashClip: {fileID: 8300000, guid: 51489e83e1a6f7b46bb2b4b62aaad86c, type: 3}
+  specialSlashClip: {fileID: 8300000, guid: 2ba812f1bd845034d928f596afa0c3a9, type: 3}
+  bombClip: {fileID: 8300000, guid: 3ac377b3533d1fb49a861188e8316f7d, type: 3}
+  specialVolumeMultiplier: 1.8
+  bulletType: 2
+--- !u!114 &-6450645202289346253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8692893170456775137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172b3c24604a16f4c94704e255cb8a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bomb

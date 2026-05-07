@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec24ac3975f55f40bb92ffc9f555160, type: 3}
   m_Name: Wave 4
   m_EditorClassIdentifier: Assembly-CSharp::WaveSO
-  enemyPrefab: {fileID: 0}
-  enemyCount: 6
-  speed: 6
+  enemyPrefab: {fileID: 3959193303880153687, guid: 8fb56168de88461449048477e3250552, type: 3}
+  enemyCount: 8
+  speed: 7
   entryGap: 0.35
   endBehavior: 0
   spawnInFormation: 0
-  formationType: 0
+  formationType: 1
   slotSpacing: 0.3
   verticalDepth: 0.18
   middleOffset: {x: 0, y: 0, z: 0}

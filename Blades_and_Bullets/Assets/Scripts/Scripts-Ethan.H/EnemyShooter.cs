@@ -7,10 +7,11 @@ public class EnemyShooter : MonoBehaviour
     private float fireRate;
     [SerializeField]
     private BaseBulletPattern bulletPattern;
-    [SerializeField]
-    private BaseBulletPattern bulletPattern2;
-    [SerializeField]
-    private float fireRate2;
+  //  [SerializeField]
+   // private BaseBulletPattern bulletPattern2;
+   // [SerializeField]
+   // private float fireRate2;
+    
 
    
     private float timer;
@@ -32,14 +33,14 @@ public class EnemyShooter : MonoBehaviour
          
             return;
         }
-       if (bulletPattern2 == null)
-        {
-           return;
-       }
+      // if (bulletPattern2 == null)
+      //  {
+       //    return;
+     //  }
 
 
         timer += Time.deltaTime;
-        timer2 += Time.deltaTime;
+      //  timer2 += Time.deltaTime;
 
         if (timer >= fireRate) {
             
@@ -49,13 +50,13 @@ public class EnemyShooter : MonoBehaviour
         }
 
        
-        if (timer2 >= fireRate2) 
-        {
-            timer2 = 0f;
+       // if (timer2 >= fireRate2) 
+       // {
+        //    timer2 = 0f;
 
-           bulletPattern2.FirePattern();
+         //  bulletPattern2.FirePattern();
         
-       }
+    //   }
         
     }
 }

@@ -2,205 +2,132 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using Unity.VisualScripting;
+using Game.Collectibles.Player;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    // Event for Top Collection
-    // Event for Power Ups
-    // Lives, Bombs, Special with cooldown
+    
     public static Player Instance{get; private set;}
-    private enum MoveState
+    public enum MoveState
     {
         Normal,
-        Focused
+        Focused,
+        Death
     }
-
-    private MoveState moveState;
-
-    // private enum AttackState
-    // {
-    //     Low,
-    //     Medium,
-    //     High
-    // }
-
-    // private AttackState attackState;
-    
+    public MoveState moveState;
     [SerializeField] private float speed;
-    [SerializeField] private GameObject hitbox;
-    [SerializeField] private GameObject slash;
-    [SerializeField] private GameObject focusSlash;
-    [SerializeField] private GameObject specialSlash;
     [SerializeField] private GameObject bombPrefab;
-
-
-    // [SerializeField] private GameObject bulletPrefab;
-    private float swingTime = 0f;
-    private float swingTimeMax = 1f;
     private float bombCooldown;
-    private float currentSwingTime = 0f;
     private float deathTimer;
-    
-    // private GameInput gameInput
-    public int lives = 3;
-    public int bombs = 3;
-    public int points = 0;
-    private bool inputEnabled = true;
+    private PlayerResourceInventory inventory;
+    private const string IS_KILLED = "isKilled";
+    public Animator animator;
 
-    //Bullet pool to return
-    [SerializeField]
-    BulletPool bulletPool;
-    //To see if its a bullet
-    [SerializeField]
-    Bullet bulletComp;
+    [SerializeField] private AudioClip playerHitClip;
+    [SerializeField] private AudioClip playerDeathClip;
+    private bool hasPlayedDeathSound; // prevents repeated game over sound playback
 
-    
-    
+    //Events
+
+    //Firing bullets Logic;    
+    public static EventHandler PlayerFiresBullet;
+
+    //Player gets hit logic
+      public static EventHandler<OnPlayerGetsHitArgs> OnPlayerGetsHit;
+      public class OnPlayerGetsHitArgs : EventArgs
+     {
+         public GameObject TargetHit;
+     }
+
+    // UI events
+  
     //Special slash variables
     public static EventHandler<ModifyAbilityCooldownArgs> ModifyAbilityCooldown;
     public class ModifyAbilityCooldownArgs : EventArgs
     {
         public float changeAmount;
     }
-    private bool _specialSlashActive;
-    //Player gets hit logic
-    public static EventHandler<OnPlayerGetsHitArgs> OnPlayerGetsHit;
-    public class OnPlayerGetsHitArgs : EventArgs
-    {
-        public GameObject TargetHit;
-    }
-    public static EventHandler<OnSendPlayerDataArgs> OnSendPlayerData;
-    public class OnSendPlayerDataArgs : EventArgs
-    {
-        public int BombsRemaining;
-    }
-    
-
-    //Firing bullets Logic;
-    public static EventHandler PlayerFiresBullet;
-    
 
     private void Awake()
     {
         Instance = this;
         moveState = MoveState.Normal;
-        slash.SetActive(false);
-        focusSlash.SetActive(false);
+        inventory = GetComponent<PlayerResourceInventory>();
     }
-
     private void Start()
     {
-        GameControllerScript.AbilityActiveStatus += AbilityActiveStatus;
         SlashScript.OnSlashingSomething += OnSlashingSomething;
         GameControllerScript.OnPlayerDeath += OnPlayerDeath;
-        OnSendPlayerData?.Invoke(this, new  OnSendPlayerDataArgs{BombsRemaining = bombs});
- 
+        animator = gameObject.GetComponent<Animator>();
+
     }
 
     private void OnPlayerDeath(object sender, EventArgs e)
     {
-        GameControllerScript.OnPlayerDeath -= OnPlayerDeath;
         Destroy(gameObject);
     }
 
-    private void OnDestroy()
-    {
-        GameControllerScript.AbilityActiveStatus -= AbilityActiveStatus;
-        SlashScript.OnSlashingSomething -= OnSlashingSomething;
-        GameControllerScript.OnPlayerDeath -= OnPlayerDeath;
-    }
 
     private void OnSlashingSomething(object sender, SlashScript.OnSlashingSomethingArgs e)
     {
-        ModifyAbilityCooldown?.Invoke(this, new ModifyAbilityCooldownArgs{changeAmount = .03f});
+        if (sender is SlashScript slashScript)
+        {
+            if (slashScript.GetBulletType() == SlashScript.BulletType.Normal || slashScript.GetBulletType() == SlashScript.BulletType.Bomb)
+            {
+                ModifyAbilityCooldown?.Invoke(this, new ModifyAbilityCooldownArgs
+                {
+                    changeAmount = 0.03f
+                });
+            } else if (slashScript.GetBulletType() == SlashScript.BulletType.Special){
         
-    }
-
-    private void AbilityActiveStatus(object sender, EventArgs e)
-    {
-        _specialSlashActive = true;
+                ModifyAbilityCooldown?.Invoke(this, new ModifyAbilityCooldownArgs
+                {
+                    changeAmount = 0f
+                });
+            }
+        }
     }
 
     private void Update()
     {
         bombCooldown -= Time.deltaTime;
-        swingTime -= Time.deltaTime;
+        deathTimer -= Time.deltaTime;
 
-        if (inputEnabled)
+        if (deathTimer < 0f)
+        {
+            moveState = MoveState.Normal;
+        }
+
+        if (moveState != MoveState.Death) // not dead
         {
             HandleMovement();
-            HandleInteraction();  
-        } else if (lives > 0)
+            HandleInteraction();
+
+        }
+        else if (inventory.Lives <= 0f) // checks if player has no lives left
         {
-            if (deathTimer < 0)
+            if (!hasPlayedDeathSound) // prevents repeated game-over handling
             {
-                inputEnabled = true;
-            } else
-            {
-                deathTimer -= Time.deltaTime;
+                hasPlayedDeathSound = true; // prevents this from running repeatedly
+                StartCoroutine(GameOverRoutine()); // starts game-over handling
             }
-        } else
-        {
-            Debug.Log("You Lost");
-           Time.timeScale = 0f; //When you lose pause game
         }
-        
-        if (swingTime <= 0 && currentSwingTime <= 0 && inputEnabled)
-        {
-           HandleSwing();            
-        }
-        if(currentSwingTime > 0)
-        {
-            currentSwingTime -= Time.deltaTime;
-        } else
-        {
-            slash.SetActive(false);
-            focusSlash.SetActive(false);
-            specialSlash.SetActive(false);
-        }
-        // Debug.Log(bombCooldown);
-       // Debug.Log("Lives: " + lives + " , Bombs: " + bombs);
+
     }
 
     private void HandleInteraction()
-    {
-        if(Keyboard.current.zKey.isPressed || Keyboard.current.periodKey.wasPressedThisFrame)
-        {
-            //Handle firing player bullets here
-            FireBullets();
-        }
-        if(Keyboard.current.cKey.isPressed || Keyboard.current.cKey.wasPressedThisFrame)
-        {
-            SpecialSlash();
-        }
-        
-        if(Keyboard.current.bKey.wasPressedThisFrame || Keyboard.current.slashKey.wasPressedThisFrame)
+    {        
+        if(Keyboard.current.xKey.wasPressedThisFrame || Keyboard.current.periodKey.wasPressedThisFrame)
         {   
-            if (bombs > 0 && bombCooldown <= 0)
+            if (inventory.Bombs > 0 && bombCooldown <= 0)
             {
-                Instantiate(bombPrefab, transform.position, Quaternion.Euler(180f, 0f, 0f), transform);
-                bombCooldown = 6f;
-                bombs--;
-                OnSendPlayerData?.Invoke(this, new  OnSendPlayerDataArgs{BombsRemaining = bombs});
                 
-            } else
-            {
-                Debug.Log("No Bombs");
-            }
+                Instantiate(bombPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+                bombCooldown = 6f;
+                inventory.SubtractBomb();
+            } 
         }
-        // Test Keybinds
-
-        if (Keyboard.current.hKey.wasPressedThisFrame)
-        {
-            lives--;
-        }
-
-        if (Keyboard.current.vKey.wasPressedThisFrame)
-        {
-            Death();
-        }
-
-
     }
 
     private void FireBullets()
@@ -234,79 +161,59 @@ public class Player : MonoBehaviour
             endMoveVector.x *= .4f;
             endMoveVector.y *= .4f;
             moveState = MoveState.Focused;
-            
         } else
         {
             moveState = MoveState.Normal;
-            
-
         }
         transform.position += endMoveVector * speed * Time.deltaTime;
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -8.75f, 2.75f), Mathf.Clamp(transform.position.y, -4.8f, 4.8f), .8f);
 
         if (transform.position.y > 20)
         {
             // Shoot event for Quick Collect
         }
     }
-
-    private void HandleSwing()
+    public void Death() // runs when the player is hit
     {
-        if (Keyboard.current.spaceKey.isPressed)
+        deathTimer = 1f; // starts temporary death/invulnerability timer
+        bombCooldown = 8f; // resets bomb cooldown after hit
+
+        inventory.SubtractLife(); // removes one life first so we can check final life state
+
+        if (inventory.Lives <= 0f) // checks if this hit killed the player permanently
         {
-            switch (moveState)
-            {
-                default:
-            case MoveState.Normal:
-                slash.SetActive(true);
-                currentSwingTime = .5f;
-                break;
-            case MoveState.Focused:
-                focusSlash.SetActive(true);
-                currentSwingTime = .5f;
-                break;     
-            }
-            swingTime = swingTimeMax;
+            GameplayAudioManager.Instance.MuteAllOtherAudioSources(0f); // mutes all other scene audio
+            GameplayAudioManager.Instance.PlaySFX(playerDeathClip, 2f); // plays final death sound
+
+            hasPlayedDeathSound = true; // prevents duplicate final death handling
+            StartCoroutine(GameOverRoutine()); // delays pause/game-over handling
+
+            return; // prevents normal hit sound and respawn logic
         }
+
+        GameplayAudioManager.Instance.PlaySFX(playerHitClip, 1.5f); // plays normal hit sound
+
+        OnPlayerGetsHit?.Invoke(this, new OnPlayerGetsHitArgs()); // broadcasts hit event
+        StartCoroutine(RespawnPoint()); // starts normal respawn sequence
     }
 
-    private void SpecialSlash()
+    IEnumerator RespawnPoint()
     {
-        if (!_specialSlashActive) return;
-        specialSlash.SetActive(true);
-        currentSwingTime = 1f;
-        _specialSlashActive = false;
-        ModifyAbilityCooldown?.Invoke(this, new ModifyAbilityCooldownArgs{changeAmount = 0f});
+        yield return new WaitForSeconds(.8f);  // Pause for 2 seconds
+        transform.position = new Vector3(-3f, -4f, transform.position.z);
+        Instantiate(bombPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
     }
 
-    public void Death()
+    private void OnDestroy()
     {
-        lives--;
-        Instantiate(bombPrefab, transform.position, Quaternion.Euler(90f, 0f, 0f));
-        bombCooldown = 8f;
-        inputEnabled = false; //Changing from input false to hitbox disabled
-        deathTimer = 4f;
-        // Shoot Event
-        // Death Animation
+        SlashScript.OnSlashingSomething -= OnSlashingSomething;
+        GameControllerScript.OnPlayerDeath -= OnPlayerDeath;
     }
-    
-    
 
-
-
-
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private IEnumerator GameOverRoutine() // waits briefly before pausing the game
     {
-        if (collision.gameObject.GetComponent<Bullet>() != null)
-        {
-		    OnPlayerGetsHit?.Invoke(this, new OnPlayerGetsHitArgs{TargetHit =  collision.gameObject});
-        }
-        
-
-
+        yield return new WaitForSecondsRealtime(1f); // gives death sound time to play
+        Time.timeScale = 0f; // pauses the game after the sound starts
     }
-
-
 
 }

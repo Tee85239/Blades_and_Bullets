@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956dcb8d079618940914e3f8af1ccca7, type: 3}
   m_Name: TestSine
   m_EditorClassIdentifier: Assembly-CSharp::SineMovementSO
-  frequency: 7
-  amplitude: 5
-  speed: 3
+  frequency: 2
+  amplitude: 1
+  speed: 1

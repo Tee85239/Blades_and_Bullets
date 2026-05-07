@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
+
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
+
+
 
 public class WaveTimeline : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class WaveTimeline : MonoBehaviour
     private List<WaveEvent> waveEvents = new();
     [SerializeField]
     private WaveCreator waveCreator;
+
+    public static EventHandler onWaveRepeat;
 
     private float stageTimer;
     private bool isPlaying;
@@ -32,7 +36,18 @@ public class WaveTimeline : MonoBehaviour
 
     private void Start()
     {
-        
+        GameControllerScript.OnChangeWaveTimer += OnChangeWaveTimer;
+    }
+
+    private void OnDestroy()
+    {
+        GameControllerScript.OnChangeWaveTimer -= OnChangeWaveTimer;
+    }
+
+    private void OnChangeWaveTimer(object sender, GameControllerScript.OnChangeWaveTimerArgs e)
+    {
+        stageTimer = e.newTimer;
+        isPlaying = e.isPlayingValue;
     }
 
     // Update is called once per frame
@@ -47,6 +62,14 @@ public class WaveTimeline : MonoBehaviour
         {
             FireEvent(waveEvents[nextEvent]);
             nextEvent++;
+        }
+
+        if (stageTimer > 55f)
+        {
+            onWaveRepeat?.Invoke(this, EventArgs.Empty);
+            waveEvents.Sort((a, b) => a.triggerTime.CompareTo(b.triggerTime));
+            stageTimer = 0f;
+            nextEvent = 0;
         }
     }
 

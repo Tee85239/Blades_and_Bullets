@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &889437675605638264
 Transform:
   m_ObjectHideFlags: 0
@@ -179,3 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7053327775be11b8da8782b7ff668e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlashScript
+  normalSlashClip: {fileID: 8300000, guid: 51489e83e1a6f7b46bb2b4b62aaad86c, type: 3}
+  specialSlashClip: {fileID: 8300000, guid: 2ba812f1bd845034d928f596afa0c3a9, type: 3}
+  bombClip: {fileID: 8300000, guid: 3ac377b3533d1fb49a861188e8316f7d, type: 3}
+  specialVolumeMultiplier: 1.8
+  bulletType: 0

@@ -22,7 +22,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0}
   sizeCapsule: {x: 0, y: 0}
   bulletMovement: {fileID: 11400000, guid: 6ada5977668c0324f9176925e6c0df48, type: 2}
-  canSplit: 0
+  canSplit: 1
   splitTime: 1
   splitMaxCount: 2
   splitAngleOffset: 1

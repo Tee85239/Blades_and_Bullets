@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec24ac3975f55f40bb92ffc9f555160, type: 3}
   m_Name: WaveSO
   m_EditorClassIdentifier: Assembly-CSharp::WaveSO
-  enemyPrefab: {fileID: 3959193303880153687, guid: 4dab5ddf87a587c189a1d4978f1b4e97, type: 3}
+  enemyPrefab: {fileID: 3959193303880153687, guid: 544ee3a97a3de574a843248b966f8881, type: 3}
   enemyCount: 6
-  entryDuration: 6
+  speed: 6
   entryGap: 1
-  endBehavior: 2
+  endBehavior: 0
   spawnInFormation: 0
   formationType: 1
   slotSpacing: 1

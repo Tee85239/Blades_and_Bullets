@@ -4,6 +4,81 @@ public class BezierPath : MonoBehaviour
 {
     public Transform[] points;
 
+    [SerializeField] private int sampleCount = 100;
+
+    private Vector3[] sampledPoints;
+    private float[] cumulativeLengths;
+    private float totalLength;
+
+
+    private void Awake()
+    {
+        BuildLengthTable();
+    }
+
+    private void OnValidate()
+    {
+        BuildLengthTable();
+    }
+
+    public Vector3 GetPointByDistance(float normalizedDistance)
+    {
+        if (sampledPoints == null || sampledPoints.Length == 0)
+            BuildLengthTable();
+
+        if (sampledPoints == null || sampledPoints.Length == 0)
+            return transform.position;
+
+        normalizedDistance = Mathf.Clamp01(normalizedDistance);
+
+        float targetLength = normalizedDistance * totalLength;
+
+        for (int i = 1; i < cumulativeLengths.Length; i++)
+        {
+            if (cumulativeLengths[i] >= targetLength)
+            {
+                float segmentLength = cumulativeLengths[i] - cumulativeLengths[i - 1];
+
+                if (segmentLength <= 0.0001f)
+                    return sampledPoints[i];
+
+                float localT = (targetLength - cumulativeLengths[i - 1]) / segmentLength;
+                return Vector3.Lerp(sampledPoints[i - 1], sampledPoints[i], localT);
+            }
+        }
+
+        return sampledPoints[sampledPoints.Length - 1];
+    }
+
+    private void BuildLengthTable()
+    {
+        if (points == null || points.Length < 4)
+        {
+            sampledPoints = null;
+            cumulativeLengths = null;
+            totalLength = 0f;
+            return;
+        }
+
+        sampledPoints = new Vector3[sampleCount + 1];
+        cumulativeLengths = new float[sampleCount + 1];
+
+        sampledPoints[0] = GetPoint(0f);
+        cumulativeLengths[0] = 0f;
+
+        float runningLength = 0f;
+
+        for (int i = 1; i <= sampleCount; i++)
+        {
+            float t = i / (float)sampleCount;
+            sampledPoints[i] = GetPoint(t);
+            runningLength += Vector3.Distance(sampledPoints[i - 1], sampledPoints[i]);
+            cumulativeLengths[i] = runningLength;
+        }
+
+        totalLength = runningLength;
+    }
+
     public Vector3 GetPoint(float t)
     {
         int numSegments = (points.Length - 1) / 3;

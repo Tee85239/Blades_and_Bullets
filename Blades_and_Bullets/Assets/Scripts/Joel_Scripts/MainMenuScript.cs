@@ -17,7 +17,7 @@ public class MainMenuScript : MonoBehaviour
         IEnumerator _LoadGame()
         {
             yield return new WaitForSeconds(.5f);
-            SceneManager.LoadSceneAsync("BladesAndBullets");
+            SceneManager.LoadSceneAsync("BladesAndBullets_Ethan_withWaves");
            
         }
     }

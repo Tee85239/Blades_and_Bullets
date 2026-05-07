@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb38cf08b4905748b11fad3a2aa9372, type: 3}
+  m_Name: Bullet4
+  m_EditorClassIdentifier: Assembly-CSharp::BulletTypeSO
+  bulletName: BulletTest
+  sprite: {fileID: 7773796562859484216, guid: f281f23eba70d884cbca15cdda71b3ac, type: 3}
+  speed: 2
+  scale: 3
+  lifetime: 10
+  hurtBoxType: 0
+  radius: 0.085
+  offset: {x: 0, y: 0}
+  sizeCapsule: {x: 0, y: 0}
+  bulletMovement: {fileID: 11400000, guid: af5f06acb9472a84883d2c09209a740e, type: 2}
+  canSplit: 0
+  splitTime: 0
+  splitMaxCount: 0
+  splitAngleOffset: 0
+  splitedBullet: {fileID: 0}
+  splitBulletPattern: {fileID: 0}
