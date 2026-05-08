@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c77ca8dd5ff19458a9c0c3d00d39aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawner
+  sfxSource: {fileID: 0}
+  shootClip: {fileID: 0}
+  shootSoundCooldown: 0.05
 --- !u!1 &4186224827476813981
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +136,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &4855640996961121942
 GameObject:
@@ -161,7 +164,7 @@ Transform:
   m_GameObject: {fileID: 4855640996961121942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4423, y: 2.5574, z: 0.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.1958683, y: 2.1127708, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -250,7 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13d53e90815faf47a10705c19d397fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPool
-  bulletPrefab: {fileID: 1013922471934456146, guid: bad876a32bdc4a047b20e717869a0b03, type: 3}
+  bulletPrefab: {fileID: 0}
   bulletPoolStartingSize: 100
 --- !u!1 &8464159939101138104
 GameObject:
@@ -296,7 +299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f973ce84165858845a03dbe969a532d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConeBulletPattern
-  spawner: {fileID: 2676001766873355183}
+  bulletSpawner: {fileID: 0}
+  playerBulletSpawner: {fileID: 0}
   bulletCount: 4
   spreadAngle: 25
   bulletType: {fileID: 11400000, guid: beeeabf4a37edba43bc883a0fb878091, type: 2}
@@ -346,5 +350,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   fireRate: 1
   bulletPattern: {fileID: 4828685233449925030}
-  bulletPattern2: {fileID: 4828685233449925030}
-  fireRate2: 2

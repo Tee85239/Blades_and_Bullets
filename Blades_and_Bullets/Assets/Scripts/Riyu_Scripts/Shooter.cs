@@ -77,7 +77,7 @@ public class Shooting : MonoBehaviour
                 default:
             case Player.MoveState.Normal:
                 slashInstance = Instantiate(slash, transform.position, transform.rotation);
-                slashInstance.GetComponent<SlashScript>().SetDamage(damage * 1f);
+                slashInstance.GetComponent<SlashScript>().SetDamage(damage * .7f);
                 break;
             case Player.MoveState.Focused:
                 slashInstance = Instantiate(focusSlash, transform.position, transform.rotation);

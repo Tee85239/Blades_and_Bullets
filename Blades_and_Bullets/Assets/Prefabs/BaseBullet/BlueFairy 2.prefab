@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad20a0f178cb6f44acd1e9fc2c257ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveEnemy
-  maxHP: 30
+  maxHP: 45
   pointDropCount: 0
   powerDropCount: 0
   pointDropPrefab: {fileID: 0}

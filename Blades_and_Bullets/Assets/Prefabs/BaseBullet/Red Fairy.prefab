@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad20a0f178cb6f44acd1e9fc2c257ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveEnemy
-  maxHP: 12
+  maxHP: 20
   pointDropCount: 0
   powerDropCount: 0
   pointDropPrefab: {fileID: 5668301637232188657, guid: 41a8ade0d7e706945825879922bbfc52, type: 3}
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cf84080c04eae46bbdb455a5c78e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
-  fireRate: 0.6
+  fireRate: 0.5
   bulletPattern: {fileID: 1629577513846337166}
 --- !u!1 &5724378423445720998
 GameObject:
@@ -526,6 +526,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConeBulletPattern
   bulletSpawner: {fileID: 5572379025498812032}
   playerBulletSpawner: {fileID: 0}
-  bulletCount: 8
+  bulletCount: 12
   spreadAngle: 40
   bulletType: {fileID: 11400000, guid: a9176f69f55bd0b4fbbd01d945bf9593, type: 2}

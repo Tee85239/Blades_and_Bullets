@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SlashScript : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class SlashScript : MonoBehaviour
         {
             transform.position += transform.up * speed * Time.deltaTime;
         }
+        
+ 
     }
 
     private void PlaySpawnSound() // plays the correct spawn sound based on attack type
@@ -94,7 +97,7 @@ public class SlashScript : MonoBehaviour
             case BulletType.Special: 
                 if (enemy != null) 
                 {
-                    enemy.TakeDamage(damage * 4f); 
+                    enemy.TakeDamage(damage* 2); 
                     OnSlashingSomething?.Invoke(this, new OnSlashingSomethingArgs { TargetHit = enemy.gameObject });
                 }
 

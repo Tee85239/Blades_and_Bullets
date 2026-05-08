@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 310248060603434235}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.31, y: 0.63, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 1374706214812242739}
   - component: {fileID: 6666774985133033823}
   - component: {fileID: 8324258520741104912}
+  - component: {fileID: 835180834143547626}
   m_Layer: 0
   m_Name: Boulder
   m_TagString: Untagged
@@ -156,7 +157,7 @@ Transform:
   m_GameObject: {fileID: 3959193303880153687}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4423, y: 2.5574, z: 0.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.195868, y: 2.1127706, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -274,6 +275,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &835180834143547626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3959193303880153687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1f643408c55d94090e0934f53d6efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpriteScript
 --- !u!1 &4152218771085707651
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13d53e90815faf47a10705c19d397fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPool
-  bulletPrefab: {fileID: 1013922471934456146, guid: bad876a32bdc4a047b20e717869a0b03, type: 3}
+  bulletPrefab: {fileID: 0}
   bulletPoolStartingSize: 100
 --- !u!1 &4693087008615098999
 GameObject:
@@ -366,8 +379,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   fireRate: 1
   bulletPattern: {fileID: 1629577513846337166}
-  bulletPattern2: {fileID: 1629577513846337166}
-  fireRate2: 2
 --- !u!1 &5724378423445720998
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,7 +405,7 @@ Transform:
   m_GameObject: {fileID: 5724378423445720998}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: 0.35, y: 0.04, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -412,6 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c77ca8dd5ff19458a9c0c3d00d39aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletSpawner
+  sfxSource: {fileID: 0}
+  shootClip: {fileID: 0}
+  shootSoundCooldown: 0.05
 --- !u!1 &6486796175213607779
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +452,7 @@ Transform:
   m_GameObject: {fileID: 6486796175213607779}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.29951, y: -1.88066, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
